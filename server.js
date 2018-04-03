@@ -1,4 +1,5 @@
-
+const crypto = require("crypto");
+var rp = require('request-promise');
 var express = require('express'),
     app = express(),
 
@@ -8,7 +9,7 @@ var express = require('express'),
     users=require('./usermodule');
 require('./userct.js');
 Review=require('./review.js');
-//created model loading here
+
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://admintest:admintest@ds163418.mlab.com:63418/webdb');
@@ -37,39 +38,12 @@ router.route('/movies/:Title')
     });
 router.route('/movies')
     .get(authJwtController.isAuthenticated,function (req, res) {
-      //console.log(process.env.USERNAME);
         con.list_all_tasks(req,res);
 
     });
-router.route('/movies/reviews?:rei')
-    .get(function (req, res) {
 
-        console.log(req.query.rei);
-
-        if (req.query.rei == 'true')
-        {
-            Movie.aggregate([
-
-                {
-                    $lookup: {
-                        from: 'reviews',
-                        localField: "Title",
-                        foreignField: "Title",
-                        as: "Reviews"
-                    }
-                }
-
-            ], function (err, comments) {
-                if (err)
-                    res.send(err);
-                res.json(comments);
-            });
-    }
-        else
-            res.send("No review");
-    });
 router.route('/movies/:Title/reviews?:rei')
-    .get(function(req,res){
+    .get(authJwtController.isAuthenticated,function(req,res){
         if(req.query.rei!='true')
             res.send("No review ");
         else
@@ -88,8 +62,7 @@ router.route('/movies/:Title/reviews?:rei')
 
             ], function (err, comments) {
                 if (err)
-                //console.log(err);
-                //console.log(comments);
+
                     res.send(err);
                 res.json(comments);
             });
@@ -97,7 +70,6 @@ router.route('/movies/:Title/reviews?:rei')
 router.route('/reviews')
     .post(authJwtController.isAuthenticated,function(req,res){
         var new_task =new Review();
-        console.log(process.env.USERNAME);
         new_task.RVName=process.env.USERNAME;
         new_task.Title = req.body.Title;
         new_task.Quote=req.body.Quote;
@@ -128,6 +100,52 @@ router.route('/movies/:taskId')
     .delete(authJwtController.isAuthenticated,function (req, res) {
         con.delete_a_task(req,res);
 
+    });
+const GA_TRACKING_ID = process.env.GA_KEY;
+
+function trackDimension(category, action, label, value, dimension, metric) {
+
+    var options = { method: 'GET',
+        url: 'https://www.google-analytics.com/collect',
+        qs:
+            {   // API Version.
+                v: '1',
+                // Tracking ID / Property ID.
+                tid: GA_TRACKING_ID,
+                // Random Client Identifier. Ideally, this should be a UUID that
+                // is associated with particular user, device, or browser instance.
+                cid: crypto.randomBytes(16).toString("hex"),
+                // Event hit type.
+                t: 'event',
+                // Event category.
+                ec: category,
+                // Event action.
+                ea: action,
+                // Event label.
+                el: label,
+                // Event value.
+                ev: value,
+                // Custom Dimension
+                cd1: dimension,
+                // Custom Metric
+                cm1: metric
+            },
+        headers:
+            {  'Cache-Control': 'no-cache' } };
+
+    return rp(options);
+}
+
+
+router.route('/test')
+    .get(function (req,res) {
+
+        // Event value must be numeric.
+        trackDimension('Feedback', 'Rating', 'Feedback for Movie', '3', 'Guardian\'s of the Galaxy', '1')
+            .then(function (response) {
+                console.log(response.body);
+                res.status(200).send('Event tracked.').end();
+            })
     });
 
 
