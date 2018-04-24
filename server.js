@@ -14,6 +14,7 @@ Review=require('./review.js');
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://admintest:admintest@ds163418.mlab.com:63418/webdb');
 var http = require('http');
+var cors = require('cors');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 require('dotenv').config();
@@ -24,7 +25,7 @@ var jwt = require('jsonwebtoken');
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(cors());
 app.use(passport.initialize());
 var rou=require('./userou.js');
 rou(app);
