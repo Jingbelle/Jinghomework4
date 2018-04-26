@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var NotEmptyString={type:String, minLength:1};
 var Notnumber={type: Number, max:2018};
-
+require('mongoose-type-url');
 var Actorschema=new Schema({
     ActorName:NotEmptyString,
     CharacterName:NotEmptyString
@@ -15,8 +15,8 @@ var moviesSchema=new Schema({
     Genre: {
         type: String, enum: ['Action', 'Adventure','Comedy','Drama','Fantasy',
             'Horror','Mystery','Thriller','Western','Biography']},
-    Actors:[Actorschema]
-
+    Actors:[Actorschema],
+    url: String
 });
 
 module.exports = mongoose.model('Movie', moviesSchema);
