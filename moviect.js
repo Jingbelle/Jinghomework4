@@ -25,14 +25,14 @@ module.exports={
         });
     },
     read_a_task:  function(req, res) {
-        Task.findOne({Title:req.params.Title}, function(err, task) {
+        Task.findOne({Title:req.params.title}, function(err, task) {
             if (err)
                 res.send(err);
             res.json(task);
         });
     },
     update_a_task: function(req, res) {
-        Task.findOneAndUpdate({_id: req.params.taskId}, req.body, {new: true}, function(err, task) {
+        Task.findOneAndUpdate({Title: req.params.title}, req.body, {new: true}, function(err, task) {
             if (err)
                 res.send(err);
             res.json(task);
@@ -41,7 +41,7 @@ module.exports={
     delete_a_task: function(req, res) {
 
         Task.remove({
-            _id: req.params.taskId
+            Title: req.params.title
         }, function(err, task) {
             if (err)
                 res.send(err);

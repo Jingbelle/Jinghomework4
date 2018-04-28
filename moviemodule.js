@@ -15,7 +15,7 @@ var moviesSchema=new Schema({
     Genre: {
         type: String, enum: ['Action', 'Adventure','Comedy','Drama','Fantasy',
             'Horror','Mystery','Thriller','Western','Biography']},
-    Actors:[Actorschema],
+    Actors:{type:[Actorschema],length:3},
     url: String
 });
 

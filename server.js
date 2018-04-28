@@ -43,14 +43,39 @@ router.route('/movies')
 
     });
 
-router.route('/movies/:Title/reviews?:rei')
+router.route('/movies?:reviews/:title')
     .get(authJwtController.isAuthenticated,function(req,res){
-        if(req.query.rei!='true')
+        if(req.query.reviews!='true')
             res.send("No review ");
         else
             Movie.aggregate([
                 {
-                    $match:{"Title": req.params.Title}
+                    $match:{"Title": req.params.title}
+                },
+                {
+                    $lookup: {
+                        from: 'reviews',
+                        localField: "Title",
+                        foreignField: "Title",
+                        as: "Reviews"
+                    }
+                }
+
+            ], function (err, comments) {
+                if (err)
+
+                    res.send(err);
+                res.json(comments);
+            });
+    });
+router.route('/movies?:reviews')
+    .get(authJwtController.isAuthenticated,function(req,res){
+        if(req.query.reviews!='true')
+            res.send("No review ");
+        else
+            Movie.aggregate([
+                {
+
                 },
                 {
                     $lookup: {
@@ -87,17 +112,17 @@ router.route('/movies')
         con.create_a_task(req,res);
 
     });
-router.route('/movies/:taskId')
+router.route('/movies/:title')
     .get(authJwtController.isAuthenticated,function (req, res) {
         con.read_a_task(req,res);
 
     });
-router.route('/movies/:taskId')
+router.route('/movies/:title')
     .put(authJwtController.isAuthenticated,function (req, res) {
         con.update_a_task(req,res);
 
     });
-router.route('/movies/:taskId')
+router.route('/movies/:title')
     .delete(authJwtController.isAuthenticated,function (req, res) {
         con.delete_a_task(req,res);
 
