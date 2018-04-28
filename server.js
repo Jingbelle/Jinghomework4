@@ -74,9 +74,7 @@ router.route('/movies?:reviews')
             res.send("No review ");
         else
             Movie.aggregate([
-                {
-
-                },
+               
                 {
                     $lookup: {
                         from: 'reviews',
