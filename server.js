@@ -43,20 +43,20 @@ router.route('/movies')
 
     });
 
-router.route('/movies?:reviews/:title')
+router.route('/movies?:reviews/:MovieId')
     .get(authJwtController.isAuthenticated,function(req,res){
         if(req.query.reviews!='true')
             res.send("No review ");
         else
             Movie.aggregate([
                 {
-                    $match:{"Title": req.params.title}
+                    $match:{"MovieId": req.params.MovieId}
                 },
                 {
                     $lookup: {
                         from: 'reviews',
-                        localField: "Title",
-                        foreignField: "Title",
+                        localField: "_id",
+                        foreignField: "MovieId",
                         as: "Reviews"
                     }
                 }
@@ -78,8 +78,8 @@ router.route('/movies?:reviews')
                 {
                     $lookup: {
                         from: 'reviews',
-                        localField: "Title",
-                        foreignField: "Title",
+                        localField: "_id",
+                        foreignField: "MovieId",
                         as: "Reviews"
                     }
                 }
@@ -95,7 +95,7 @@ router.route('/reviews')
     .post(authJwtController.isAuthenticated,function(req,res){
         var new_task =new Review();
         new_task.RVName=process.env.USERNAME;
-        new_task.Title = req.body.Title;
+        new_task.MovieId = req.body.MovieId;
         new_task.Quote=req.body.Quote;
         new_task.Rating=req.body.Rating;
         new_task.save(function(err, task) {
