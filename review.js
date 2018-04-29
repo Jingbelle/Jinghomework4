@@ -5,7 +5,7 @@ var NotEmptyString={type:String, minLength:1};
 var Numberr={type: Number, max:5,min:1};
 
 var ReviewSchema=new Schema({
-    MovieId:Number,
+    MovieId:String,
     
     RVName: String,
     Quote:NotEmptyString,
