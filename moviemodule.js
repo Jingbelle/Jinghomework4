@@ -16,7 +16,9 @@ var moviesSchema=new Schema({
         type: String, enum: ['Action', 'Adventure','Comedy','Drama','Fantasy',
             'Horror','Mystery','Thriller','Western','Biography']},
     Actors:{type:[Actorschema],length:3},
-    url: String
+    url: String,
+    avgRating:Number
+
 });
 
 module.exports = mongoose.model('Movie', moviesSchema);

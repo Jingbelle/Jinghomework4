@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+
 var rp = require('request-promise');
 var express = require('express'),
     app = express(),
@@ -9,7 +10,9 @@ var express = require('express'),
     users=require('./usermodule');
 require('./userct.js');
 Review=require('./review.js');
-
+var Schema=mongoose.Schema;
+var ObjectId=mongoose.Types.ObjectId;
+var ids=new ObjectId("5aa9ddea061905551c1e3223");
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://admintest:admintest@ds163418.mlab.com:63418/webdb');
@@ -33,7 +36,8 @@ var router = express.Router();
 var movie=mongoose.model('Movie'),
     Review=mongoose.model('Review');
 var con=require('./moviect.js');
-router.route('/movies/:Title')
+
+router.route('/movies/:id')
     .get(authJwtController.isAuthenticated,function(req,res){
         con.read_a_task(req,res);
     });
@@ -43,23 +47,30 @@ router.route('/movies')
 
     });
 
-router.route('/movies?:reviews/:MovieId')
+
+
+router.route('/:id/movie?:reviews')
     .get(authJwtController.isAuthenticated,function(req,res){
-        if(req.query.reviews!='true')
-            res.send("No review ");
-        else
+        if(req.query.reviews='true')
+
+        {  var ids=new ObjectId(req.params.id);
             Movie.aggregate([
                 {
-                    $match:{"MovieId": req.params.MovieId}
+                    $match: {_id:ids}
+                },
+
+                {
+                    $lookup: {
+                        from: "reviews",
+                        localField: "_id",
+                        foreignField: "MovieId",
+                        as: "reviews"
+                    }
                 },
                 {
-                    $lookup: {
-                        from: 'reviews',
-                        localField: "_id",
-                        foreignField: "MovieId",
-                        as: "Reviews"
+                    $group:{_id:{title:"$Title",date:"$Yearreleased",Genre:"$Genre",Rating:"$reviews.Rating",reviews:"$reviews"}}
                     }
-                }
+
 
             ], function (err, comments) {
                 if (err)
@@ -67,32 +78,13 @@ router.route('/movies?:reviews/:MovieId')
                     res.send(err);
                 res.json(comments);
             });
-    });
-router.route('/movies?:reviews')
-    .get(authJwtController.isAuthenticated,function(req,res){
-        if(req.query.reviews!='true')
-            res.send("No review ");
-        else
-            Movie.aggregate([
-               
-                {
-                    $lookup: {
-                        from: 'reviews',
-                        localField: "_id",
-                        foreignField: "MovieId",
-                        as: "Reviews"
-                    }
-                }
 
-            ], function (err, comments) {
-                if (err)
 
-                    res.send(err);
-                res.json(comments);
-            });
+        }
     });
 router.route('/reviews')
     .post(authJwtController.isAuthenticated,function(req,res){
+        //res.json('dasdasd');
         var new_task =new Review();
         new_task.RVName=process.env.USERNAME;
         new_task.MovieId = req.body.MovieId;
@@ -103,14 +95,13 @@ router.route('/reviews')
                 res.send(err);
             res.json(task);
         });
-
     });
 router.route('/movies')
     .post(authJwtController.isAuthenticated,function (req, res) {
         con.create_a_task(req,res);
 
     });
-router.route('/movies/:title')
+router.route('/movies/:Title')
     .get(authJwtController.isAuthenticated,function (req, res) {
         con.read_a_task(req,res);
 
