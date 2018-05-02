@@ -37,7 +37,7 @@ var movie=mongoose.model('Movie'),
     Review=mongoose.model('Review');
 var con=require('./moviect.js');
 
-router.route('/movies/:id')
+router.route('/movie/:id')
     .get(authJwtController.isAuthenticated,function(req,res){
         con.read_a_task(req,res);
     });
@@ -49,7 +49,7 @@ router.route('/movies')
 
 
 
-router.route('/mov/:id')
+router.route('/movies/:id')
     .get(authJwtController.isAuthenticated,function(req,res){
         if(req.query.reviews='true')
 
