@@ -49,7 +49,7 @@ router.route('/movies')
 
 
 
-router.route('/:id/movie?:reviews')
+router.route('/mov/:reviews')
     .get(authJwtController.isAuthenticated,function(req,res){
         if(req.query.reviews='true')
 
@@ -82,7 +82,7 @@ router.route('/:id/movie?:reviews')
 
         }
     });
-router.route('/reviews')
+router.route('/movies?reviews')
     .get(authJwtController.isAuthenticated,function(req,res){
         if(req.query.reviews='true')
 
