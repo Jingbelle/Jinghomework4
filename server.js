@@ -66,10 +66,8 @@ router.route('/movies/:id')
                         foreignField: "MovieId",
                         as: "reviews"
                     }
-                },
-                {
-                    $group:{_id:{Title:"$Title",Yearreleased:"$Yearreleased",Genre:"$Genre",Rating:"$reviews.Rating",reviews:"$reviews",Actors:"$Actors"}}
-                    }
+                }
+               
 
 
             ], function (err, comments) {
