@@ -68,7 +68,7 @@ router.route('/movies/:id')
                     }
                 },
                 {
-                    $group:{_id:{Title:"$Title",Yearreleased"$Yearreleased",Genre:"$Genre",Rating:"$reviews.Rating",reviews:"$reviews",Actors:"$Actors"}}
+                    $group:{_id:{Title:"$Title",Yearreleased:"$Yearreleased",Genre:"$Genre",Rating:"$reviews.Rating",reviews:"$reviews",Actors:"$Actors"}}
                     }
 
 
