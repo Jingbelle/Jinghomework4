@@ -49,7 +49,7 @@ router.route('/movies')
 
 
 
-router.route('/mov/:reviews')
+router.route('/movies/:id/?reviews=true')
     .get(authJwtController.isAuthenticated,function(req,res){
         if(req.query.reviews='true')
 
