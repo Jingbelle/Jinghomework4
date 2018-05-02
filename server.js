@@ -51,9 +51,9 @@ router.route('/movies')
 
 router.route('/movies/:id')
     .get(authJwtController.isAuthenticated,function(req,res){
-        if(req.query.reviews='true')
+        
 
-        {  var ids=new ObjectId(req.params.id);
+          var ids=new ObjectId(req.params.id);
             Movie.aggregate([
                 {
                     $match: {_id:ids}
@@ -68,7 +68,7 @@ router.route('/movies/:id')
                     }
                 },
                 {
-                    $group:{_id:{title:"$Title",date:"$Yearreleased",Genre:"$Genre",Rating:"$reviews.Rating",reviews:"$reviews"}}
+                    $group:{_id:{Title:"$Title",Yearreleased"$Yearreleased",Genre:"$Genre",Rating:"$reviews.Rating",reviews:"$reviews",Actors:"$Actors"}}
                     }
 
 
@@ -80,7 +80,7 @@ router.route('/movies/:id')
             });
 
 
-        }
+        
     });
 router.route('/movies?reviews=true')
     .get(authJwtController.isAuthenticated,function(req,res){
