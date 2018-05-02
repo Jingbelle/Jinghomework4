@@ -82,7 +82,7 @@ router.route('/movies/:id/?reviews=true')
 
         }
     });
-router.route('/movies?reviews')
+router.route('/movies?reviews=true')
     .get(authJwtController.isAuthenticated,function(req,res){
         if(req.query.reviews='true')
 
