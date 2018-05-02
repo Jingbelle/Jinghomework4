@@ -86,7 +86,7 @@ router.route('/reviews')
     .get(authJwtController.isAuthenticated,function(req,res){
         if(req.query.reviews==='true')
 
-        {  var ids=new ObjectId(req.params.id);
+        {  
             Movie.aggregate([
               
 
