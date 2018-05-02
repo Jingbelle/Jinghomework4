@@ -83,6 +83,34 @@ router.route('/:id/movie?:reviews')
         }
     });
 router.route('/reviews')
+    .get(authJwtController.isAuthenticated,function(req,res){
+        if(req.query.reviews==='true')
+
+        {  var ids=new ObjectId(req.params.id);
+            Movie.aggregate([
+              
+
+                {
+                    $lookup: {
+                        from: "reviews",
+                        localField: "_id",
+                        foreignField: "MovieId",
+                        as: "reviews"
+                    }
+                },
+               
+
+            ], function (err, comments) {
+                if (err)
+
+                    res.send(err);
+                res.json(comments);
+            });
+
+
+        }
+    });
+router.route('/newreviews')
     .post(authJwtController.isAuthenticated,function(req,res){
         //res.json('dasdasd');
         var new_task =new Review();
