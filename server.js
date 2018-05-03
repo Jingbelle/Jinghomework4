@@ -94,7 +94,7 @@ else {
     });
 
 
-//}
+}
     });
 router.route('/newreviews')
     .post(authJwtController.isAuthenticated,function(req,res){
