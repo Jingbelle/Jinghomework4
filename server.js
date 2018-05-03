@@ -70,7 +70,9 @@ router.route('/:md/movies?:reviews')
             });  });
 router.route('/movies?:reviews')
     .get(authJwtController.isAuthenticated,function(req,res){
-        if(req.query.reviews='true')
+        if(req.query.reviews !='true')
+            res.send("no");
+    else
  {  
          Movie.aggregate([
               {
