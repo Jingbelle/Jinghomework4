@@ -37,7 +37,7 @@ var movie=mongoose.model('Movie'),
     Review=mongoose.model('Review');
 var con=require('./moviect.js');
 
-router.route('/movie/:id')
+router.route('/movies/:id')
     .get(authJwtController.isAuthenticated,function(req,res){
         con.read_a_task(req,res);
     });
@@ -46,14 +46,9 @@ router.route('/movies')
         con.list_all_tasks(req,res);
 
     });
-
-
-
-router.route('/movies/:id')
+router.route('/:md/movies?:reviews')
     .get(authJwtController.isAuthenticated,function(req,res){
-        
-
-          var ids=new ObjectId(req.params.id);
+         var ids=new ObjectId(req.params.md);
             Movie.aggregate([
                 {
                     $match: {_id:ids}
@@ -67,28 +62,18 @@ router.route('/movies/:id')
                         as: "reviews"
                     }
                 }
-               
-
-
-            ], function (err, comments) {
+                ], function (err, comments) {
                 if (err)
 
                     res.send(err);
                 res.json(comments);
-            });
-
-
-        
-    });
-router.route('/movies?reviews=true')
+            });  });
+router.route('/movies?:reviews')
     .get(authJwtController.isAuthenticated,function(req,res){
         if(req.query.reviews='true')
-
-        {  
-            Movie.aggregate([
-              
-
-                {
+ {  
+         Movie.aggregate([
+              {
                     $lookup: {
                         from: "reviews",
                         localField: "_id",
@@ -96,9 +81,7 @@ router.route('/movies?reviews=true')
                         as: "reviews"
                     }
                 },
-               
-
-            ], function (err, comments) {
+                ], function (err, comments) {
                 if (err)
 
                     res.send(err);
