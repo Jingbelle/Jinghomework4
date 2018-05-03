@@ -73,28 +73,7 @@ router.route('/movies?:rev')
     .get(authJwtController.isAuthenticated,function(req,res){
 //if(req.query.rev='true')
    res.send("sdasdas");
-//else {
-    Movie.aggregate([
 
-        {
-            $lookup: {
-                from: "reviews",
-                localField: "_id",
-                foreignField: "MovieId",
-                as: "reviews"
-            }
-        }
-
-
-    ], function (err, comments) {
-        if (err)
-
-            res.send(err);
-        res.json(comments);
-    });
-
-
-//}
     });
 router.route('/newreviews')
     .post(authJwtController.isAuthenticated,function(req,res){
