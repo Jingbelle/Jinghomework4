@@ -68,30 +68,33 @@ router.route('/:md/movies?:reviews')
                     res.send(err);
                 res.json(comments);
             });  });
-router.route('/movies?:reviews')
+
+router.route('/movies?:review')
     .get(authJwtController.isAuthenticated,function(req,res){
-        if(req.query.reviews !='true')
-            res.send("no");
-    else
- {  
-         Movie.aggregate([
-              {
-                    $lookup: {
-                        from: "reviews",
-                        localField: "_id",
-                        foreignField: "MovieId",
-                        as: "reviews"
-                    }
-                },
-                ], function (err, comments) {
-                if (err)
+if(req.query.review!='true')
+    res.send("sdasdas");
+else {
+    Movie.aggregate([
 
-                    res.send(err);
-                res.json(comments);
-            });
-
-
+        {
+            $lookup: {
+                from: "reviews",
+                localField: "_id",
+                foreignField: "MovieId",
+                as: "reviews"
+            }
         }
+
+
+    ], function (err, comments) {
+        if (err)
+
+            res.send(err);
+        res.json(comments);
+    });
+
+
+}
     });
 router.route('/newreviews')
     .post(authJwtController.isAuthenticated,function(req,res){
