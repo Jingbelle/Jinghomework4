@@ -69,11 +69,11 @@ router.route('/:md/movies?:reviews')
                 res.json(comments);
             });  });
 
-router.route('/movies?:review')
+router.route('/movies?:rev')
     .get(authJwtController.isAuthenticated,function(req,res){
-//if(req.query.review!='true')
-//    res.send("sdasdas");
-//else {
+if(req.query.rev='true')
+   res.send("sdasdas");
+else {
     Movie.aggregate([
 
         {
