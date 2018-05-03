@@ -71,9 +71,9 @@ router.route('/:md/movies?:reviews')
 
 router.route('/movies?:review')
     .get(authJwtController.isAuthenticated,function(req,res){
-if(req.query.review!='true')
-    res.send("sdasdas");
-else {
+//if(req.query.review!='true')
+//    res.send("sdasdas");
+//else {
     Movie.aggregate([
 
         {
@@ -94,7 +94,7 @@ else {
     });
 
 
-}
+//}
     });
 router.route('/newreviews')
     .post(authJwtController.isAuthenticated,function(req,res){
