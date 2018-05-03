@@ -69,7 +69,7 @@ router.route('/:md/movies?:reviews')
                 res.json(comments);
             });  });
 
-router.route('/movies?:rev')
+router.route('/mov?:rev')
     .get(authJwtController.isAuthenticated,function(req,res){
 //if(req.query.rev='true')
    res.send("sdasdas");
