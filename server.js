@@ -41,7 +41,7 @@ router.route('/movie/:id')
     .get(authJwtController.isAuthenticated,function(req,res){
         con.read_a_task(req,res);
     });
-router.route('/movies')
+router.route('/movielist')
     .get(authJwtController.isAuthenticated,function (req, res) {
         con.list_all_tasks(req,res);
 
