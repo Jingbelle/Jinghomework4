@@ -75,7 +75,7 @@ router.route('/movies?:reviews')
     Movie.aggregate([
         {
             $sort:{ avgRating: -1}
-        }
+        },
                 {
                     $lookup: {
                         from: "reviews",
