@@ -73,7 +73,9 @@ router.route('/movies?:reviews')
     .get(authJwtController.isAuthenticated,function(req,res){
     if(req.query.reviews ='true')
     Movie.aggregate([
-               
+        {
+            $sort:{ avgRating: -1}
+        }
                 {
                     $lookup: {
                         from: "reviews",
